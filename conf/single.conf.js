@@ -4,14 +4,15 @@ exports.config = {
 
   updateJob: false,
   specs: [
-    './tests/specs/single_test.js'
+    './tests/specs/fail_pass.js',
+    './tests/specs/pass_fail.js'
   ],
   exclude: [],
+  services  : ['browserstack'],
 
   capabilities: [{
     browser: 'chrome',
-    name: 'single_test',
-    build: 'webdriver-browserstack'
+    build: `webdriver-browserstack${(new Date().getTime()).toString(36)}`
   }],
 
   logLevel: 'verbose',
@@ -21,9 +22,29 @@ exports.config = {
   waitforTimeout: 10000,
   connectionRetryTimeout: 90000,
   connectionRetryCount: 3,
-  
+
   framework: 'mocha',
   mochaOpts: {
-      ui: 'bdd'
-  }
+      ui: 'bdd',
+      timeout: 300000
+  },
+
+  beforeTest(test) {
+  return new Promise((resolve) => {
+    browser.desiredCapabilities.name = test.fullTitle;
+    resolve();
+  });
+},
+
+beforeHook() {
+  return new Promise((resolve) => {
+    // if (global.debug) { browser.debug(); }
+
+    if (global.notFirstSpec) {
+      browser.reload();
+    }
+    global.notFirstSpec = true;
+    resolve();
+  });
+}
 }
