@@ -1,7 +1,7 @@
 exports.config = {
   user: process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
   key: process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
-
+  
   updateJob: false,
   specs: [
     './tests/specs/fail_pass.js',
@@ -15,7 +15,7 @@ exports.config = {
     build: `webdriver-browserstack${(new Date().getTime()).toString(36)}`
   }],
 
-  logLevel: 'verbose',
+  logLevel: 'error',
   coloredLogs: true,
   screenshotPath: './errorShots/',
   baseUrl: '',
